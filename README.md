@@ -28,7 +28,7 @@ Critic Scorecard: PASS  0.785 overall
   Hallucination Safety 0.900  ██████████████████████░░
 ```
 
-*(Add your demo GIF here — record with ShareX or ScreenToGif)*
+![Demo](demos/demo.gif)
 
 ---
 
@@ -293,4 +293,10 @@ pytest tests/ -v
 
 ---
 
-*Built as a portfolio project demonstrating multi-agent system design.*
+*Built as a portfolio project demonstrating multi-agent system design.*  
+  
+Query Box![Query](demos/1.png)  
+
+Multi Agent Pipeline![Multi Agent Pipeline](demos/2.png)  
+
+Answer With Sources !![Answer with Sources](demos/3.png)

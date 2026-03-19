@@ -358,7 +358,25 @@ with st.sidebar:
 # ── Page: Research ─────────────────────────────────────────────────────────────
 
 if page == "🔍 Research":
-    st.markdown('<div class="section-header">Research Query</div>', unsafe_allow_html=True)
+    st.markdown("""
+                <div style="margin-bottom:24px">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+                        <span style="font-family:var(--mono);font-size:28px;color:var(--accent)">⬡</span>
+                        <div>
+                            <div style="font-family:var(--mono);font-size:22px;font-weight:700;
+                                        color:var(--text);letter-spacing:-0.02em">
+                                RESEARCH ASSISTANT
+                            </div>
+                            <div style="font-family:var(--sans);font-size:12px;color:var(--muted);
+                                        margin-top:2px">
+                                Multi-Agent · RAG · Critic · RAGAS
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="border-color:var(--border);margin-top:12px">
+                </div>
+                <div class="section-header">Research Query</div>
+                """, unsafe_allow_html=True)
 
     query = st.text_area(
         label="query",
