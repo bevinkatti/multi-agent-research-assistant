@@ -29,3 +29,7 @@ desktop.ini
 
 # Logs
 *.log
+
+# Allow demos folder
+!Demos/
+!Demos/*
