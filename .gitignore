@@ -1,0 +1,31 @@
+﻿# Secrets
+.env
+.env.local
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+
+# Data (large files, regenerated at runtime)
+data/
+evaluation/results/
+
+# Test scripts (temporary)
+test_*.py
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# Logs
+*.log
