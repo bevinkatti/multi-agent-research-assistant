@@ -10,7 +10,7 @@ short_description: Multi-agent AI research assistant with LangGraph, Groq and FA
   
 # ⬡ Multi-Agent AI Research Assistant
 
-> A production-grade multi-agent research system with real-time web search, RAG over documents, critic scoring, and RAGAS evaluation. Built with LangGraph, Groq, FAISS, FastAPI, and Streamlit.
+A production-grade multi-agent research system with real-time web search, RAG over documents, critic scoring, and RAGAS evaluation. Built with LangGraph, Groq, FAISS, FastAPI, and Streamlit.
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115-green.svg)](https://fastapi.tiangolo.com)
