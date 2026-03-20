@@ -6,7 +6,7 @@ colorTo: blue
 sdk: docker
 pinned: false
 short_description: Multi-agent AI research assistant with LangGraph, Groq and FAISS
----  
+---    
 
 # ⬡ Multi-Agent AI Research Assistant
 
