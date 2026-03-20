@@ -32,4 +32,4 @@ desktop.ini
 
 # Allow demos folder
 !Demos/
-!Demos/*
+!Demos/*Demos/
