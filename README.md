@@ -195,7 +195,7 @@ multi-agent-research-assistant/
 
 ```bash
 # 1. Clone and enter project
-git clone https://github.com/your-username/multi-agent-research-assistant
+git clone https://github.com/bevinkatti/multi-agent-research-assistant
 cd multi-agent-research-assistant
 
 # 2. Create virtual environment
