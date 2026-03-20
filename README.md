@@ -1,13 +1,13 @@
 ---
 title: Research Assistant
-emoji: ⬡
+emoji: 🤖
 colorFrom: green
 colorTo: blue
 sdk: docker
 pinned: false
 short_description: Multi-agent AI research assistant with LangGraph, Groq and FAISS
----    
-
+---  
+  
 # ⬡ Multi-Agent AI Research Assistant
 
 > A production-grade multi-agent research system with real-time web search, RAG over documents, critic scoring, and RAGAS evaluation. Built with LangGraph, Groq, FAISS, FastAPI, and Streamlit.
