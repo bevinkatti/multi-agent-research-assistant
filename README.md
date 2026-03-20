@@ -4,8 +4,8 @@ emoji: 🤖
 colorFrom: green
 colorTo: blue
 sdk: docker
-pinned: false
-short_description: Multi-agent AI research assistant with LangGraph, Groq and FAISS
+pinned: false  
+
 ---  
   
 # ⬡ Multi-Agent AI Research Assistant
