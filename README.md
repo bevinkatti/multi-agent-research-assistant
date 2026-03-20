@@ -11,9 +11,11 @@
 
 ## Demo
 ![Demo](Demos/demo.gif)  
+🚀 **[Try it live on Hugging Face Spaces](https://huggingface.co/spaces/bevinkatti/research-assistant)** 
 
 > Example ;  
-Query: *"What memory mechanisms do LLM agents use?"*
+Query: *"What memory mechanisms do LLM agents use?"*   
+
 
 ```
 Agent Pipeline:
