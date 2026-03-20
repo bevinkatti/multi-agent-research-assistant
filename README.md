@@ -17,7 +17,7 @@ A production-grade multi-agent research system with real-time web search, RAG ov
 [![LangGraph](https://img.shields.io/badge/LangGraph-0.4-orange.svg)](https://langchain-ai.github.io/langgraph)
 [![RAGAS](https://img.shields.io/badge/RAGAS-0.2-purple.svg)](https://docs.ragas.io)
 
----
+
 
 ## Demo
 
@@ -40,7 +40,7 @@ Critic Scorecard: PASS  0.785 overall
 
 ![Demo](Demos/demo.gif)
 
----
+
 
 ## Architecture
 
@@ -109,7 +109,7 @@ FAISS IndexFlatIP (cosine similarity via L2-norm + inner product)
 Top-k chunks ──► ReaderAgent ──► Groq LLM ──► Grounded answer
 ```
 
----
+
 
 ## Tech Stack
 
@@ -128,7 +128,7 @@ Top-k chunks ──► ReaderAgent ──► Groq LLM ──► Grounded answer
 | Retries | tenacity | Exponential backoff, max 3 retries |
 | Containerization | Docker + docker-compose | Reproducible deployment |
 
----
+
 
 ## Benchmark Results
 
@@ -162,7 +162,7 @@ Evaluated on a hardcoded 20-question benchmark across 4 categories using RAGAS m
 | Synthesizer | 1–2s | Final answer generation |
 | **Total pipeline** | **6–10s** | Search + Reader run in parallel |
 
----
+
 
 ## Project Structure
 
@@ -192,7 +192,7 @@ multi-agent-research-assistant/
 └── requirements.txt
 ```
 
----
+
 
 ## Setup
 
@@ -242,7 +242,7 @@ docker-compose up --build
 # API docs: http://localhost:8000/docs
 ```
 
----
+
 
 ## API Reference
 
@@ -279,7 +279,7 @@ curl -X POST http://localhost:8000/research \
 }
 ```
 
----
+
 
 
 ## Deployment: Hugging Face Spaces
@@ -293,7 +293,7 @@ curl -X POST http://localhost:8000/research \
 
 > Note: On HF Spaces free tier, use `FAISS_INDEX_PATH=/tmp/faiss_index` since the filesystem is ephemeral.
 
----
+
 
 ## Running Tests
 
@@ -301,7 +301,7 @@ curl -X POST http://localhost:8000/research \
 pytest tests/ -v
 ```
 
----
+
 
 *Built as a portfolio project demonstrating multi-agent system design.*  
   
