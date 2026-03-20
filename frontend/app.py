@@ -421,7 +421,7 @@ if page == "🔍 Research":
 
             # Update agent rows with real results
             with agent_placeholder.container():
-                for name, key in [
+                for name, key in [  
                     ("SearchAgent", "search"),
                     ("ReaderAgent", "reader"),
                     ("CriticAgent", "critic"),
@@ -430,6 +430,19 @@ if page == "🔍 Research":
                     status = agent_data.get("status", "pending")
                     latency = agent_data.get("latency_ms", 0)
                     err = agent_data.get("error") or ""
+
+                    # ReaderAgent: show friendly message instead of red error
+                    # when no documents are ingested yet
+                    if key == "reader" and status == "failed":
+                        no_docs = (
+                            "No documents" in err
+                            or "not ingested" in err.lower()
+                            or "no documents" in err.lower()
+                        )
+                        if no_docs:
+                            status = "success"
+                            err = "no docs yet — use Ingest page to add PDFs"
+
                     render_agent_row(name, status, latency, err)
 
                 # Synthesizer
