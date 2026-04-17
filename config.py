@@ -26,6 +26,9 @@ class Settings(BaseSettings):
     # --- LLM Providers ---
     groq_api_key: str = Field(default="", description="Groq API key")
     anthropic_api_key: str = Field(default="", description="Anthropic API key")
+    google_api_key: str = Field(default="", description="Google API key")
+    deepseek_api_key: str = Field(default="", description="DeepSeek API key")
+    qwen_api_key: str = Field(default="", description="Qwen API key")
 
     # --- Web Search ---
     tavily_api_key: str = Field(default="", description="Tavily API key")
@@ -33,7 +36,9 @@ class Settings(BaseSettings):
     # --- Model Configuration ---
     default_llm_provider: str = Field(default="groq")
     groq_model_name: str = Field(default="llama-3.3-70b-versatile")
-    anthropic_model_name: str = Field(default="claude-haiku-4-5-20251001")
+    google_model_name: str = Field(default="models/gemma-4-31b-it")
+    deepseek_model_name: str = Field(default="deepseek/deepseek-chat")
+    qwen_model_name: str = Field(default="qwen/qwen3-next-80b-a3b-instruct:free")
 
     # --- Agent Behavior ---
     agent_timeout_seconds: int = Field(default=30)
@@ -60,10 +65,16 @@ class Settings(BaseSettings):
     streamlit_port: int = Field(default=8501)
 
     def get_llm_model_name(self) -> str:
-        """Returns the active model name based on provider setting."""
+        """Returns the primary model name based on provider setting."""
         if self.default_llm_provider == "groq":
             return self.groq_model_name
-        return self.anthropic_model_name
+        elif self.default_llm_provider == "google":
+            return self.google_model_name
+        elif self.default_llm_provider == "deepseek":
+            return self.deepseek_model_name
+        elif self.default_llm_provider == "qwen":
+            return self.qwen_model_name
+        return self.groq_model_name  # fallback
 
 
 @lru_cache()

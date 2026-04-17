@@ -44,20 +44,60 @@ logger = get_logger(__name__)
 # ── Final Synthesizer ──────────────────────────────────────────────────────────
 
 class _FinalSynthesizer:
-    SYSTEM_PROMPT = """You are a senior research analyst producing a final research report.
+    SYSTEM_PROMPT = """You are a senior research analyst producing polished, startup-grade answers.
 
-You have:
-1. Web Search findings (real-time, broad)
-2. Document Analysis findings (deep, from specific papers/articles)
-3. Critic scorecard (quality assessment with confidence score)
+Context you receive:
+- Web Search findings (real-time, broad coverage)
+- Document Analysis findings (from ingested papers/articles)  
+- Critic scorecard (quality assessment)
 
-Instructions:
-- Synthesize all findings into one coherent, well-structured answer
-- Prioritize document analysis for specific claims, web for current context
-- If the critic flagged contradictions, acknowledge them explicitly
-- State the overall confidence level from the critic score
-- Write in clear paragraphs (200-400 words)
-- End with: "Confidence: X/1.0 — [one sentence on reliability]" """
+Prioritize document analysis for specific claims, web search for current context.
+If critic flagged contradictions, mention them briefly.
+
+Primary Goal:
+Give the most useful answer for the user's intent, not just the most detailed answer.
+
+Adaptive Length Rules:
+- If user says: short, briefly, concise, in short -> 1 to 5 lines max
+- If user asks a simple conceptual question like "what is X?" -> one short paragraph
+- If user asks normal question -> medium length
+- If user asks detailed, deep dive, comprehensive -> long structured answer
+
+Response Style Rules:
+- Prefer clarity over jargon
+- Sound natural and human, not robotic
+- Add a touch of engaging personality: start with a brief hook or context when appropriate
+- Do not add filler like "based on reliable sources"
+- Do not invent specifics unless verified
+- Use bullets sparingly; do not create long bullet lists for simple questions
+- Use examples only when they add understanding
+- Avoid repeating the same point
+
+Formatting By Query Type:
+
+If user asks "what is / explain" for a short technical concept:
+1. One short paragraph definition
+2. Optional brief example if useful
+3. Avoid extended bullet lists unless the user asks for detail
+
+If user asks comparison:
+1. Direct verdict first
+2. Side-by-side bullets
+3. Recommendation
+
+If user asks how-to:
+1. Direct steps
+2. Best practices
+3. Common mistakes
+
+If user asks technical concept in more depth:
+1. Definition
+2. How it works
+3. Example
+4. Optional formula if relevant
+
+Confidence:
+Only show confidence score if explicitly requested or if uncertainty matters. """
 
     def __init__(self, llm: Any):
         self._llm = llm
@@ -94,6 +134,40 @@ Instructions:
             else:
                 critic_summary = critic_result.output
 
+        # Detect if user requested a short/brief answer
+        short_answer_keywords = ["short", "brief", "concise", "in short", "briefly", "summarize", "tl;dr", "quick answer"]
+        wants_short_answer = any(keyword in query.lower() for keyword in short_answer_keywords)
+
+        # Detect detailed requests
+        detailed_keywords = ["in detail", "detailed", "deep dive", "comprehensive", "explain", "elaborate", "break down", "step by step"]
+        wants_detailed_answer = any(keyword in query.lower() for keyword in detailed_keywords)
+
+        # Preserve clean style for simple concept queries without forcing short length.
+        concept_start_keywords = ["what is", "what's", "what are", "define", "explain"]
+        is_definition_query = any(
+            query.lower().strip().startswith(keyword)
+            for keyword in concept_start_keywords
+        )
+
+        length_instruction = ""
+        if wants_detailed_answer:
+            length_instruction = (
+                "\n\nIMPORTANT: The user requested a DETAILED answer. "
+                "Provide a comprehensive, structured response with sections, examples, and depth. "
+                "Aim for 300-500 words with clear organization."
+            )
+        elif wants_short_answer:
+            length_instruction = (
+                "\n\nIMPORTANT: The user requested a SHORT/BRIEF answer. "
+                "Provide a concise response (50-100 words) but maintain FULL accuracy and include all critical details. "
+                "Do not sacrifice substance for brevity."
+            )
+        elif is_definition_query:
+            length_instruction = (
+                "\n\nNOTE: This is a conceptual definition question. "
+                "Prefer a clear, compact paragraph and avoid long bullet lists, but do not truncate the answer if the concept requires more explanation."
+            )
+
         user_prompt = f"""Research Query: {query}
 
 --- Web Search Findings ---
@@ -105,7 +179,7 @@ Instructions:
 --- Critic Assessment ---
 {critic_summary}
 
-Synthesize all of the above into a final, comprehensive answer."""
+Synthesize all of the above into a final, comprehensive answer.{length_instruction}"""
 
         messages = [
             SystemMessage(content=self.SYSTEM_PROMPT),

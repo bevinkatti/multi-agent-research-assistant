@@ -4,11 +4,12 @@
 # Search Agent — LangGraph node that:
 # 1. Accepts a research query from graph state
 # 2. Calls WebSearchTool (Tavily) for real-time results
-# 3. Uses Groq LLM to synthesize results into a cited answer
+# 3. Uses LLM (Groq/Anthropic/Google) to synthesize results into a cited answer
 # 4. Returns structured AgentResult back to the orchestrator
 #
 # Design principles:
 # - Stateless: reads from and writes to LangGraph state only
+# - Multi-provider with fallback: Groq → Gemini
 # - Retries: tenacity exponential backoff on LLM calls
 # - Timeout-aware: respects AGENT_TIMEOUT_SECONDS from config
 # - Fully logged: every call tracked with latency
@@ -21,7 +22,7 @@ from typing import Optional, Any
 from enum import Enum
 
 from langchain_groq import ChatGroq
-from langchain_anthropic import ChatAnthropic
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage, SystemMessage
 from tenacity import (
     retry,
@@ -97,33 +98,78 @@ class ResearchState(TypedDict, total=False):
 
 # ── LLM Factory ───────────────────────────────────────────────────────────────
 
+class _LLMFallback:
+    """Wrapper that tries multiple LLM providers sequentially on every ainvoke call."""
+
+    def __init__(self, provider_factories: list[tuple[str, Any]]):
+        self._provider_factories = provider_factories
+        self._instances: list[Optional[Any]] = [None] * len(provider_factories)
+
+    async def ainvoke(self, messages: list[Any]) -> Any:
+        last_error: Optional[Exception] = None
+        for idx, (name, factory) in enumerate(self._provider_factories):
+            try:
+                if self._instances[idx] is None:
+                    self._instances[idx] = factory()
+                return await self._instances[idx].ainvoke(messages)
+            except Exception as e:
+                logger.warning(
+                    "%s provider failed during ainvoke: %s. Falling back to next provider.",
+                    name,
+                    str(e),
+                )
+                last_error = e
+        if last_error is None:
+            raise ValueError("No LLM providers were configured.")
+        raise last_error
+
+
 def get_llm(temperature: float = 0.1) -> Any:
     """
-    Returns the configured LLM instance.
-    Tries Groq first, falls back to Anthropic if key missing.
+    Returns an LLM instance with multi-provider fallback support.
+    Tries providers in this order: Groq → Gemini.
+
+    The wrapper catches runtime errors during `ainvoke` and retries the next
+    available provider, which handles token limit or availability failures.
 
     WHY temperature=0.1:
     Research synthesis needs factual consistency, not creativity.
     Low temperature = deterministic, grounded responses.
     """
-    if settings.default_llm_provider == "groq" and settings.groq_api_key:
-        return ChatGroq(
-            api_key=settings.groq_api_key,
-            model=settings.groq_model_name,
-            temperature=temperature,
-            max_tokens=1024,
+    provider_factories: list[tuple[str, Any]] = []
+
+    if settings.groq_api_key:
+        provider_factories.append(
+            (
+                "Groq",
+                lambda: ChatGroq(
+                    api_key=settings.groq_api_key,
+                    model=settings.groq_model_name,
+                    temperature=temperature,
+                    max_tokens=1024,
+                ),
+            )
         )
-    elif settings.anthropic_api_key:
-        return ChatAnthropic(
-            api_key=settings.anthropic_api_key,
-            model=settings.anthropic_model_name,
-            temperature=temperature,
-            max_tokens=1024,
+
+    if settings.google_api_key:
+        provider_factories.append(
+            (
+                "Gemini",
+                lambda: ChatGoogleGenerativeAI(
+                    api_key=settings.google_api_key,
+                    model=settings.google_model_name,
+                    temperature=temperature,
+                    max_tokens=1024,
+                ),
+            )
         )
-    else:
+
+    if not provider_factories:
         raise ValueError(
-            "No LLM API key configured. Set GROQ_API_KEY or ANTHROPIC_API_KEY in .env"
+            "No LLM provider available. Set GROQ_API_KEY or GOOGLE_API_KEY in .env"
         )
+
+    return _LLMFallback(provider_factories)
 
 
 # ── Search Agent ───────────────────────────────────────────────────────────────
