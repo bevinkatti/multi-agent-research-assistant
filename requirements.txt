@@ -46,7 +46,7 @@ streamlit-autorefresh==1.0.1       # For live agent activity polling
 
 # --- Evaluation ---
 ragas==0.4.3
-datasets==3.5.0                    # Required by RAGAS internals
+datasets>=4.0.0                   # Required by RAGAS internals
 
 # --- Observability & Logging ---
 structlog==25.3.0                  # Structured JSON logging
