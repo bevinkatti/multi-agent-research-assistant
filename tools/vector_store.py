@@ -113,9 +113,17 @@ class VectorStore:
             "loading_embedding_model",
             model=settings.embedding_model,
         )
-        self._encoder = SentenceTransformer(settings.embedding_model)
-        self._dim = self._encoder.get_sentence_embedding_dimension()
+        
+        # Try loading directly from local cache for instant cold-starts;
+        # fall back to online download if running for the very first time.
+        try:
+            self._encoder = SentenceTransformer(settings.embedding_model, local_files_only=True)
+        except Exception:
+            self._encoder = SentenceTransformer(settings.embedding_model)
 
+        self._dim = self._encoder.get_embedding_dimension()
+        
+        
         # FAISS index — initialized empty or loaded from disk
         self._index: faiss.IndexFlatIP = None
         self._metadata: list[dict] = []          # Parallel list to FAISS vectors
