@@ -41,7 +41,7 @@ python-multipart==0.0.20           # For file uploads in FastAPI
 httpx==0.28.1                      # Async HTTP client
 
 # --- Frontend ---
-streamlit>=1.30.0
+streamlit>=1.39.0
 streamlit-autorefresh==1.0.1       # For live agent activity polling
 
 # --- Evaluation ---

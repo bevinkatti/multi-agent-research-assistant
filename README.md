@@ -1,4 +1,14 @@
-﻿# ⬡ Multi-Agent AI Research Assistant
+﻿---
+title: Multi Agent Research Assistant
+emoji: 🤖
+colorFrom: blue
+colorTo: indigo
+sdk: streamlit
+sdk_version: 1.39.0
+app_file: frontend/app.py
+pinned: false
+---
+# ⬡ Multi-Agent AI Research Assistant
 
 > A production-grade multi-agent research system with real-time web search, RAG over documents, critic scoring, and RAGAS evaluation. Built with LangGraph, Groq, FAISS, FastAPI, and Streamlit.
 
