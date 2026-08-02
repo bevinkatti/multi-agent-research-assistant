@@ -62,6 +62,38 @@ html, body, [data-testid="stAppViewContainer"] {
 }
 [data-testid="stSidebar"] * { color: var(--text) !important; }
 
+/* Custom GitHub Link Button */
+.github-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out;
+    margin-top: 8px;
+}
+
+.github-btn:hover {
+    border-color: var(--accent) !important;
+    color: var(--accent) !important;
+    box-shadow: 0 0 12px rgba(79, 255, 176, 0.2);
+    transform: translateY(-1px);
+}
+
+.github-btn svg {
+    fill: currentColor;
+    width: 16px;
+    height: 16px;
+}
+
 /* Input fields */
 [data-testid="stTextInput"] input,
 [data-testid="stTextArea"] textarea {
@@ -347,24 +379,22 @@ with st.sidebar:
         label_visibility="collapsed",
     )
     
-    st.markdown('<div class="section-header" style="margin-top:16px">Links</div>', unsafe_allow_html=True)
-    st.link_button(
-            label="⭐ GitHub Repository",
-            url="https://github.com/bevinkatti/multi-agent-research-assistant",
-            use_container_width=True,
-        )
-    st.markdown('<div class="section-header" style="margin-top:16px">Links</div>', unsafe_allow_html=True)
-    st.link_button(
-        label="⭐ GitHub",
-        url="https://github.com/bevinkatti/multi-agent-research-assistant",
-        use_container_width=True,
-    )
+    #github link 
+    
+    st.markdown("""
+    <a href="https://github.com/bevinkatti/multi-agent-research-assistant" target="_blank" class="github-btn">
+        <svg viewBox="0 0 16 16">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.08.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        GitHub
+    </a>
+    """, unsafe_allow_html=True)
 
     st.markdown('<hr style="border-color:var(--border);margin:16px 0">', unsafe_allow_html=True)
     st.markdown(f"""
     <div style="font-family:var(--mono);font-size:10px;color:var(--muted)">
-        MODEL: {health.get('model','—') if api_ok else '—'}<br>
-        UPTIME: {health.get('uptime_seconds',0):.0f}s
+        MODEL: {(health or {}).get('model','—') if api_ok else '—'}<br>
+        UPTIME: {(health or {}).get('uptime_seconds',0):.0f}s
     </div>
     """, unsafe_allow_html=True)
 

@@ -14,6 +14,13 @@ import asyncio
 import json
 import time
 import uuid
+
+import logging
+# Suppress verbose HTTP and SentenceTransformer startup logs
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("sentence_transformers").setLevel(logging.WARNING)
+logging.getLogger("urllib3").setLevel(logging.WARNING)
+
 from contextlib import asynccontextmanager
 from typing import Optional, AsyncGenerator
 
