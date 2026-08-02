@@ -54,7 +54,7 @@ tenacity==8.5.0                   # Retry logic with exponential backoff
 
 # --- Utilities ---
 python-dotenv==1.1.0
-numpy==1.26.4
+#numpy>=2.1.0                   #resolves the optimal compatible NumPy version automatically
 pandas==2.2.3
 tiktoken==0.9.0                    # Token counting for context window management
 tqdm==4.67.1
