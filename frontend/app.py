@@ -346,6 +346,19 @@ with st.sidebar:
         options=["🔍 Research", "📚 Ingest Documents", "📊 Benchmark"],
         label_visibility="collapsed",
     )
+    
+    st.markdown('<div class="section-header" style="margin-top:16px">Links</div>', unsafe_allow_html=True)
+    st.link_button(
+            label="⭐ GitHub Repository",
+            url="https://github.com/bevinkatti/multi-agent-research-assistant",
+            use_container_width=True,
+        )
+    st.markdown('<div class="section-header" style="margin-top:16px">Links</div>', unsafe_allow_html=True)
+    st.link_button(
+        label="⭐ GitHub",
+        url="https://github.com/bevinkatti/multi-agent-research-assistant",
+        use_container_width=True,
+    )
 
     st.markdown('<hr style="border-color:var(--border);margin:16px 0">', unsafe_allow_html=True)
     st.markdown(f"""
