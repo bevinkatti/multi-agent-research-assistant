@@ -41,7 +41,7 @@ python-multipart==0.0.20           # For file uploads in FastAPI
 httpx==0.28.1                      # Async HTTP client
 
 # --- Frontend ---
-streamlit==1.28.0
+streamlit>=1.30.0
 streamlit-autorefresh==1.0.1       # For live agent activity polling
 
 # --- Evaluation ---
@@ -50,7 +50,7 @@ datasets==3.5.0                    # Required by RAGAS internals
 
 # --- Observability & Logging ---
 structlog==25.3.0                  # Structured JSON logging
-tenacity==9.1.2                    # Retry logic with exponential backoff
+tenacity==8.5.0                   # Retry logic with exponential backoff
 
 # --- Utilities ---
 python-dotenv==1.1.0
