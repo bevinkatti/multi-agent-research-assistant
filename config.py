@@ -35,7 +35,7 @@ class Settings(BaseSettings):
 
     # --- Model Configuration ---
     default_llm_provider: str = Field(default="groq")
-    groq_model_name: str = Field(default="llama-3.3-70b-versatile")
+    groq_model_name: str = Field(default="openai/gpt-oss-120b")
     google_model_name: str = Field(default="models/gemma-4-31b-it")
     deepseek_model_name: str = Field(default="deepseek/deepseek-chat")
     qwen_model_name: str = Field(default="qwen/qwen3-next-80b-a3b-instruct:free")
